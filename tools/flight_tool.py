@@ -20,80 +20,36 @@ API_KEY = os.getenv("AVIATIONSTACK_API_KEY")
 
 # Default origin when user says only destination, e.g. "Japan trip"
 # Change this if your default location is not Delhi.
-DEFAULT_ORIGIN_IATA = os.getenv("DEFAULT_ORIGIN_IATA", "DAC")
+DEFAULT_ORIGIN_IATA = os.getenv("DEFAULT_ORIGIN_IATA", "DEL")
 
 
 BASE_URL = "https://api.aviationstack.com/v1/flights"
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-llm = ChatOpenAI(
-    model="gpt-5-nano",
-    api_key=OPENAI_API_KEY,
-    temperature=0
-)
-
-class Route(BaseModel):
-    departure: str | None = None
-    arrival: str | None = None
-
-structured_llm = llm.with_structured_output(Route)
+airports = airportsdata.load("IATA")
 
 
-route_prompt = ChatPromptTemplate.from_messages([
-    (
-        "system",
-        """
-Extract the departure and arrival airport IATA codes.
+def resolve_location_to_iata(location: str | None):
 
-Rules:
-- If an airport code is provided, use it.
-- If only a city is provided, infer its primary airport.
-- If only a destination country is provided, infer its busiest international airport.
-- If the departure airport cannot be determined, return null.
-- If the arrival airport cannot be determined, return null.
+    if not location:
+        return None
 
-Examples:
-- India -> DEL
-- Bangladesh -> DAC
-- Japan -> NRT
-- Vietnam -> HAN
-- Singapore -> SIN
-- France -> CDG
-- Germany -> FRA
-- UK -> LHR
-- USA -> JFK
+    location = location.strip().lower()
+    for code, airport in airports.items():
 
-Return only the structured output.
-""",
-    ),
-    ("human", "{query}"),
-])
+        if airport["city"].lower() == location:
+            return code
+    try:
+        country = pycountry.countries.lookup(location)
 
+        for code, airport in airports.items():
 
+            if airport["country"] == country.alpha_2:
 
+                return code
+    except LookupError:
+        pass
 
-def parse_route(query: str):
-
-    chain = route_prompt | structured_llm
-
-    result = chain.invoke(
-        {
-            "query": query
-        }
-    )
-
-    dep = result.departure
-    arr = result.arrival
-
-    if dep:
-        dep = dep.upper()
-
-    if arr:
-        arr = arr.upper()
-
-    return dep, arr
-
+    return None
 
 def format_flight(flight: dict):
     airline = flight.get("airline", {}).get("name") or "Unknown airline"
@@ -142,7 +98,7 @@ Arrival:
 """.strip()
 
 
-def search_flights(query: str, limit: int = 10):
+def search_flights(origin: str | None,destination: str | None,limit: int = 5,):
     if not API_KEY:
         return (
             "Flight API error: AVIATIONSTACK_API_KEY is missing.\n"
@@ -150,7 +106,12 @@ def search_flights(query: str, limit: int = 10):
             "AVIATIONSTACK_API_KEY=your_api_key_here"
         )
 
-    dep_iata, arr_iata = parse_route(query)
+    dep_iata = resolve_location_to_iata(origin)
+
+    arr_iata = resolve_location_to_iata(destination)
+
+    if dep_iata is None:
+        dep_iata = DEFAULT_ORIGIN_IATA
 
     params = {
         "access_key": API_KEY,
@@ -211,7 +172,7 @@ def search_flights(query: str, limit: int = 10):
     return f"{route_info}\n\n" + "\n\n---\n\n".join(formatted_flights)
 
 
-if __name__ == "__main__":
-    print(search_flights("Plan a 7 days Japan trip from Bangladesh"))
-    print("\n" + "=" * 80 + "\n")
-    print(search_flights("all country flight info"))
+# if __name__ == "__main__":
+#     print(search_flights("Plan a 7 days Japan trip from Bangladesh"))
+#     print("\n" + "=" * 80 + "\n")
+#     print(search_flights("all country flight info"))
