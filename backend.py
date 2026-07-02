@@ -187,7 +187,6 @@ Important:
 - Use markdown headings like #, ##, ### for sections.
 - Use **bold** for important points and bullet lists for details.
 - Keep it clear, practical, and easy to read.
-- Mention that live flight API may not provide ticket prices if pricing is unavailable.
 - Keep the response useful for real travel planning.
 """
     response=llm.invoke([
