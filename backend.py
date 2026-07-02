@@ -174,7 +174,7 @@ Hotel Results: {state['hotel_results']}.
 Itinerary: {state['itinerary']}.
 
 
-Format the final answer beautifully using these sections:
+Format the final answer beautifully as a polished travel itinerary using markdown:
 
 1. Trip Summary
 2. Flight Information
@@ -184,7 +184,9 @@ Format the final answer beautifully using these sections:
 6. Final Recommendations
 
 Important:
-- Be clear and practical.
+- Use markdown headings like #, ##, ### for sections.
+- Use **bold** for important points and bullet lists for details.
+- Keep it clear, practical, and easy to read.
 - Mention that live flight API may not provide ticket prices if pricing is unavailable.
 - Keep the response useful for real travel planning.
 """
