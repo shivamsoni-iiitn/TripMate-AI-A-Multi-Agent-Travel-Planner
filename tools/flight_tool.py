@@ -22,11 +22,9 @@ API_KEY = os.getenv("AVIATIONSTACK_API_KEY")
 # Change this if your default location is not Delhi.
 DEFAULT_ORIGIN_IATA = os.getenv("DEFAULT_ORIGIN_IATA", "DEL")
 
-
 BASE_URL = "https://api.aviationstack.com/v1/flights"
 
 airports = airportsdata.load("IATA")
-
 
 def resolve_location_to_iata(location: str | None):
 

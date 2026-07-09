@@ -144,7 +144,6 @@ def context_agent(state: TravelState):
         if hasattr(m, "content")
     )
     context = context_chain.invoke({
-
         "origin": state.get("origin"),
         "destination": state.get("destination"),
         "departure_date": state.get("departure_date"),

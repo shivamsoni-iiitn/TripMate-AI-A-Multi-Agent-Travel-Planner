@@ -19,18 +19,18 @@
     </div>
 
     <main class="app-container">
-
+ 
         <section class="hero-section">
             <div class="badge">
-                ✈️ TripMate AI — A Multi-Agent Travel Planner with LangGraph
+                ✈️ TripMate — Your AI Travel Planner
             </div>
 
             <h1>
-                Plan Your Perfect Trip with AI
+                Plan Your Next Trip in Minutes
             </h1>
 
             <p>
-                Search flights, discover hotels, and generate a complete travel itinerary using a multi-agent LangGraph system.
+                Tell us where you want to go, and we'll suggest flights, hotels, attractions, and a day-by-day itinerary that fits your budget.
             </p>
         </section>
 
@@ -40,14 +40,10 @@
                 <div>
                     <h2>Where do you want to go?</h2>
                     <p>
-                        Example: Plan a complete 7 days Japan trip from Delhi under 2 lakhs.
+                        Example: Plan a 7-day Japan trip from Delhi under 2 lakhs.
                     </p>
                 </div>
 
-                <div class="status-pill">
-                    <span class="status-dot"></span>
-                    Online
-                </div>
             </div>
 
             <div class="input-area">
@@ -57,7 +53,7 @@
                 ></textarea>
 
                 <button id="sendBtn" onclick="sendMessage()">
-                    <span id="btnText">Generate Plan</span>
+                    <span id="btnText">Start Planning</span>
                     <span id="btnLoader" class="loader hidden"></span>
                 </button>
             </div>
@@ -86,8 +82,7 @@
 
             <div class="result-header">
                 <div>
-                    <h2>Your AI Travel Plan</h2>
-                    <p id="threadInfo">Thread ID: -</p>
+                    <h2>Your Travel Plan</h2>
                 </div>
 
                 <div class="result-actions">
@@ -113,7 +108,7 @@
     </main>
 
     <footer>
-        Built with FastAPI, LangGraph, Groq, PostgreSQL, Tavily and AviationStack
+        Travel recommendations updated in real time.
     </footer>
 
     <!-- Markdown Renderer -->
