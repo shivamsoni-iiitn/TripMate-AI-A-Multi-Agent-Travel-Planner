@@ -88,11 +88,9 @@ function showResult(answer, threadId) {
 
     const resultSection = document.getElementById("resultSection");
     const resultBox = document.getElementById("resultBox");
-    const threadInfo = document.getElementById("threadInfo");
 
     resultBox.innerHTML = renderMarkdownToHtml(answer);
 
-    threadInfo.textContent = `Thread ID: ${threadId}`;
 
     resultSection.classList.remove("hidden");
 
